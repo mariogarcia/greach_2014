@@ -5,13 +5,11 @@
 ///_/  /_/\____/\__,_/\__,_/_/\__,_/_/  /_/\__/\__, /
 //                                            /____/
 //
-// OBJECTIVE: NOT TO GET MAD AT YOUR BOSS
+// OBJECTIVE: REFACTOR, REFACTOR, REFACTOR
 // PROBLEM: MODULARITY
-// SAYING: DIVIDE AND CONQUER
+// SAYING: GREAT MINDS THINK ALIKE
 //
 //
-@Grab(group='org.gperfutils', module='gbench', version='0.4.2-groovy-2.1')
-
 class FunctionalSimplicity {
 
     final File NBA_SCORES_FILE = new File('data/nbascore.csv')
@@ -24,9 +22,7 @@ class FunctionalSimplicity {
     // GENERALIZATION
     Integer extractMaximum(Closure<Integer> collector) {
         return NBA_SCORES_FILE.withReader { reader->
-            reader.
-                collect { line -> try { collector(line) as Integer } catch (e) { 0 } }.
-                max()
+            reader.collect { line -> try { collector(line) as Integer } catch (e) { 0 } }.max()
         }
     }
 
@@ -35,15 +31,14 @@ class FunctionalSimplicity {
     }
 
     // MAXIMUM DIFFERENCE ON SATURDAYS
-
     Integer extractMaximumDifferenceOnSaturdays() {
 
-        //F: HAS BEEN PLAYED
-        //F: IS SATURDAY
+        //F: HAS BEEN PLAYED 5 tokens fields == 5
+        //F: IS SATURDAY -- 6th
         //C: EXTRACT FIELDS
         //C: GET DIFFERENCE
 
-
+        return 0
     }
 
 //      _
@@ -69,15 +64,8 @@ class FunctionalSimplicity {
     }
 }
 
-
-
-
-def imperativeVSFunctional = benchmark {
-    'Functional Simplicity' {
-        new FunctionalSimplicity().with {
-            assert extractMaximumDifferenceOnSaturdays()  == 62
-        }
-    }
+new FunctionalSimplicity().with {
+    assert extractMaximumDifference() == 184
+    assert extractMaximumDifferenceOnSaturdays() == 62
 }
 
-imperativeVSFunctional.prettyPrint()

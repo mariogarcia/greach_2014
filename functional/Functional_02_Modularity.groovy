@@ -5,7 +5,7 @@
 ///_/  /_/\____/\__,_/\__,_/_/\__,_/_/  /_/\__/\__, /
 //                                            /____/
 //
-// OBJECTIVE: NOT TO GET MAD AT YOUR BOSS
+// OBJECTIVE: NOT TO GET MAD AT WORK
 // PROBLEM: MODULARITY
 // SAYING: DIVIDE AND CONQUER
 //
@@ -51,7 +51,7 @@ class ImperativeMess {
     // TELEPHONE RINGING ....
 
     // WANT TO GET MAXIMUM HOME SCORE ? ...
-    // WELL I HAVE TO THINK ABOUT IT BOSS
+    // WELL I HAVE TO THINK ABOUT IT MR SMITH
     // ... IT COULD TAKE A WHILE
     //
     // YEAP

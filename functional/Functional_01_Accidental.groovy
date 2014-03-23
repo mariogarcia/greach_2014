@@ -22,12 +22,6 @@ import static groovyx.gpars.GParsPool.withPool
 final File NBA_SCORES_FILE = new File('data/nbascore.csv')
 final String COMMA = ','
 
-// PHONE RINGING... O_o
-//...
-// BOSS: Hey Maria
-// BOSS: Whatever, I need you to extract maximum visitor score from
-// the dataset I sent you
-
 def imperativeVSFunctional = benchmark {
     /* --------------------------------------------------- */
     /* ---------------- IMPERATIVE MESS ------------------ */
