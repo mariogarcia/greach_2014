@@ -25,10 +25,8 @@ final String COMMA = ','
 // PHONE RINGING... O_o
 //...
 // BOSS: Hey Maria
-// ME: Is Mario sir
 // BOSS: Whatever, I need you to extract maximum visitor score from
 // the dataset I sent you
-// ME: Right away Shirt, I mean sir. Sorry... my english
 
 def imperativeVSFunctional = benchmark {
     /* --------------------------------------------------- */
@@ -82,9 +80,10 @@ def imperativeVSFunctional = benchmark {
         // :) GETTING RID THE WAY WE SHOULD TRAVERSE A FILE
         NBA_SCORES_FILE.splitEachLine(COMMA){ tokens ->
             try {
-                // :) GETTING RID OF THE COMPARISON AND ASSIGNMENTS
-                maxVisitorScoreGroovy =
-                    [tokens[2] as Integer, maxVisitorScoreGroovy].max()
+                def current = tokens[2] as Integer
+                if (current > maxVisitorScoreGroovy) {
+                    maxVisitorScoreGroovy = current
+                }
             } catch (e) {
                // MMmmmm JUST IN CASE CAST EXCEPTION
             }
@@ -101,12 +100,11 @@ def imperativeVSFunctional = benchmark {
 
         // NO OUTER VARIABLES
         Integer max = NBA_SCORES_FILE.withReader { reader ->
-            return reader.inject(0) { maxScore, line ->
+            return reader.inject(0) { max, line ->
                 try {
-                    return [line.split(COMMA)[2].toInteger(), maxScore].max()
+                    return [line.split(COMMA)[2].toInteger(), max].max()
                 } catch (e) {
-                    // NOT THERE YET
-                    return maxScore
+                    return max // NOT THERE YET
                 }
             }
         }
@@ -120,7 +118,7 @@ def imperativeVSFunctional = benchmark {
         // GET ALL VISITOR SCORES AND GET THE MAXIMUM VALUE
         Integer max = NBA_SCORES_FILE.withReader { reader->
             reader.
-                collect { line -> line.split(COMMA)[2].with { n -> n.isNumber() ? n.toInteger() : 0 } }. // WRONG FP
+                collect { line -> try { line.split(COMMA)[2] as Integer } catch (e) { 0 } }.
                 max()
         }
 

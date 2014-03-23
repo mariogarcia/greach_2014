@@ -57,6 +57,9 @@ class ImperativeMess {
     // YEAP
     // I'LL TRY ASAP...c[_]
     // (-.-)Zzz...
+    //
+    // ... SO HOW AM GONNA DO IT ?
+    // ... TEMPLATE PATTERN ? ... Mmmm
 
     /**
      *  Horrible refactoring
@@ -146,7 +149,6 @@ class FunctionalSimplicity {
 def imperativeVSFunctional = benchmark {
     'Imperative Mess' {
         new ImperativeMess().with {
-            assert getMaximumVisitorRegisteredScore() == 186
             assert getMaximumRegisteredScore(true) == 184
             assert getMaximumRegisteredScore(false) == 186
         }
@@ -155,7 +157,6 @@ def imperativeVSFunctional = benchmark {
         new FunctionalSimplicity().with {
             assert extractMaximum { l -> l.split(COMMA)[2] } == 186 // Maximum visitor score
             assert extractMaximum { l -> l.split(COMMA)[4] } == 184 // Maximum home score
-            assert extractMaximumDifference() == 68
         }
     }
 }
