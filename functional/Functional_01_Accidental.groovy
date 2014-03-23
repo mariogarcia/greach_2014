@@ -17,8 +17,6 @@
 
 @Grab(group='org.gperfutils', module='gbench', version='0.4.2-groovy-2.1')
 
-import static groovyx.gpars.GParsPool.withPool
-
 final File NBA_SCORES_FILE = new File('data/nbascore.csv')
 final String COMMA = ','
 
