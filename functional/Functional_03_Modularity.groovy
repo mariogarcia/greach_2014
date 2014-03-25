@@ -65,7 +65,7 @@ class FunctionalSimplicity {
 }
 
 new FunctionalSimplicity().with {
-    assert extractMaximumDifference() == 184
+    assert extractMaximumDifference() == 68
     assert extractMaximumDifferenceOnSaturdays() == 62
 }
 
