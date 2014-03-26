@@ -1,3 +1,15 @@
+//  _   _ ____                                   _         _       __           _
+// | \ | |  _ \   /\                            | |       | |     / _|         | |
+// |  \| | |_) | /  \    __      _____  _ __ ___| |_    __| | ___| |_ ___  __ _| |_
+// | . ` |  _ < / /\ \   \ \ /\ / / _ \| '__/ __| __|  / _` |/ _ \  _/ _ \/ _` | __|
+// | |\  | |_) / ____ \   \ V  V / (_) | |  \__ \ |_  | (_| |  __/ ||  __/ (_| | |_
+// |_| \_|____/_/    \_\   \_/\_/ \___/|_|  |___/\__|  \__,_|\___|_| \___|\__,_|\__|
+//
+//
+// PROBLEM: Looking for the worst defeat in an NBA game of all times
+// CONCEPT: PARALLEL
+// EXAMPLE: Looking for the biggest difference in an NBA game of all times
+//
 @Grab(group='org.gperfutils', module='gbench', version='0.4.2-groovy-2.1')
 
 import static groovyx.gpars.GParsPool.withPool
