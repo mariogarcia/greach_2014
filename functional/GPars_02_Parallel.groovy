@@ -56,7 +56,9 @@ def sequentialVsParallel = benchmark(warmUpTime: 10) {
     }
     'Parallel Groovy' {
         Integer result = collectMaximum { reader ->
-            return withPool(4) { reader.collectParallel(safely(differenceCollector)) }
+            return withPool(4) {
+                reader.collectParallel(safely(differenceCollector))
+            }
         }
 
         assert result == 68
