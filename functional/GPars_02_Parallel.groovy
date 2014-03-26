@@ -42,21 +42,21 @@ def safely = { closure ->
 }
 
 // TEMPLATE METHOD
-def collectMaximumDifference = { strategy ->
-    return NBA_SCORES_FILE.withReader(strategy)
+def collectMaximum = { strategy ->
+    return NBA_SCORES_FILE.withReader(strategy).max()
 }
 
 def sequentialVsParallel = benchmark(warmUpTime: 10) {
     'Sequencial Groovy' {
-        Integer result = collectMaximumDifference { reader ->
-            return reader.collect(safely(differenceCollector)).max()
+        Integer result = collectMaximum { reader ->
+            return reader.collect(safely(differenceCollector))
         }
 
         assert result == 68
     }
     'Parallel Groovy' {
-        Integer result = collectMaximumDifference { reader ->
-            return withPool(4) { reader.collectParallel(safely(differenceCollector)).max() }
+        Integer result = collectMaximum { reader ->
+            return withPool(4) { reader.collectParallel(safely(differenceCollector)) }
         }
 
         assert result == 68
