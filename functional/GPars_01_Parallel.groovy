@@ -11,7 +11,9 @@ def field = { field ->
 }
 
 def fields = { Integer... fieldNumbers ->
-    return { line -> fieldNumbers.collect{ fieldNumber -> field(fieldNumber) << line } }
+    return { line ->
+        fieldNumbers.collect{ fieldNumber -> field(fieldNumber) << line }
+    }
 }
 
 // TRANSFORMING DATA
@@ -32,7 +34,7 @@ def collectMaximumDifference = { strategy ->
     return NBA_SCORES_FILE.withReader(strategy)
 }
 
-def sequentialVsParallel = benchmark {
+def sequentialVsParallel = benchmark(warmUpTime: 10) {
     'Sequencial Groovy' {
         Integer result = collectMaximumDifference { reader ->
             return reader.collect(safely(differenceCollector)).max()
