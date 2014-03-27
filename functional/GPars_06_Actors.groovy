@@ -1,4 +1,12 @@
-@Grab(group='org.gperfutils', module='gbench', version='0.4.2-groovy-2.1')
+//  _____ _               _____
+// |  __ (_)             |  __ \
+// | |__) | _ __   __ _  | |__) |__  _ __   __ _
+// |  ___/ | '_ \ / _` | |  ___/ _ \| '_ \ / _` |
+// | |   | | | | | (_| | | |  | (_) | | | | (_| |
+// |_|   |_|_| |_|\__, | |_|   \___/|_| |_|\__, |
+//                 __/ |                    __/ |
+//                |___/                    |___/
+//
 
 import groovyx.gpars.actor.Actors
 import java.util.concurrent.CountDownLatch
