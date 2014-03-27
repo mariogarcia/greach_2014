@@ -21,14 +21,14 @@
 // INDEX
 // =====
 //
-// 01: FUNCTIONAL PROGRAMMING | 15
+// 01: WHAT IS GPARS          | 10
 // 02: PARALLEL               | 15
 // 03: ASYNC EXECUTION        | 10
 // 04: SPECULATIONS           | 10
 // 05: DATAFLOW               | 25
 // 06: ACTORS                 | 30
 // ---------------------------|---
-//                            |105 min
+//                            |100 min
 //
 //
 //
