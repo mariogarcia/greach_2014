@@ -1,16 +1,33 @@
 @Grab(group='org.gperfutils', module='gbench', version='0.4.2-groovy-2.1')
 
-final File NBA_SCORES_FILE = new File('data/nbascore.csv')
-final String COMMA = ','
+import groovyx.gpars.actor.Actors
+import java.util.concurrent.CountDownLatch
 
-def benchmarkActors= benchmark(warmUpTime: 10) {
-    'A' {
-
+final countDown = new CountDownLatch(10)
+final pong = Actors.actor {
+    loop {
+        react { message ->
+            countDown.countDown()
+            println "Countdown: ${countDown.count}"
+            println message
+            reply "pong"
+        }
     }
-    'B' {
+}
 
+final ping = Actors.actor {
+    pong << "ping"
+    loop {
+        react { message ->
+           println message
+           Thread.sleep(2000)
+           pong << "ping"
+        }
     }
-} // END OF BENCHMARK
+}
 
+// EXAMPLE FOR READING A LINE AND RETURNING THE REVERSE
+// EXAMPLE FOR AN ACTOR CROPPING IMAGES SENT TO IT
 
-benchmarkActors.prettyPrint()
+countDown.await()
+
