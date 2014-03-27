@@ -1,15 +1,19 @@
+//  _          _   _       _          _     ___
+// | |        | | ( )     | |        | |   |__ \
+// | |     ___| |_|/ ___  | |__   ___| |_     ) |
+// | |    / _ \ __| / __| | '_ \ / _ \ __|   / /
+// | |___|  __/ |_  \__ \ | |_) |  __/ |_   |_|
+// |______\___|\__| |___/ |_.__/ \___|\__|  (_)                  _    __   _______
+// \ \   / /          | |        | | | |                        | |   \ \ / /  __ \
+//  \ \_/ /__  _   _  | |__   ___| |_| |_ ___ _ __   _ __   ___ | |_   \ V /| |  | |
+//   \   / _ \| | | | | '_ \ / _ \ __| __/ _ \ '__| | '_ \ / _ \| __|   > < | |  | |
+//    | | (_) | |_| | | |_) |  __/ |_| ||  __/ |    | | | | (_) | |_   / . \| |__| |
+//    |_|\___/ \__,_| |_.__/ \___|\__|\__\___|_|    |_| |_|\___/ \__| /_/ \_\_____/
 //
-//  _______ _                                          _ _                        _
-// |__   __| |                                        (_) |                      | |
-//    | |  | |__   ___    ___ ___  _ __ ___  _ __ ___  _| |_ _ __ ___   ___ _ __ | |_ ___
-//    | |  | '_ \ / _ \  / __/ _ \| '_ ` _ \| '_ ` _ \| | __| '_ ` _ \ / _ \ '_ \| __/ __|
-//    | |  | | | |  __/ | (_| (_) | | | | | | | | | | | | |_| | | | | |  __/ | | | |_\__ \
-//    |_|  |_| |_|\___|  \___\___/|_| |_| |_|_| |_| |_|_|\__|_| |_| |_|\___|_| |_|\__|___/
 //
-// PROBLEM: Be efficient with resources and dont block while there's something to do meanwhile
+// PROBLEM: Dependent values dont have to be calculated sequentially
 // CONCEPT: DATAFLOW
-// EXAMPLE: Two teams compete to finish a given sprint in the first place... let's see which one
-// competes better ;)
+// EXAMPLE: Combined probability
 //
 @Grab(group='org.gperfutils', module='gbench', version='0.4.2-groovy-2.1')
 
@@ -17,6 +21,16 @@ import static groovyx.gpars.dataflow.Dataflow.task
 
 import groovyx.gpars.group.DefaultPGroup
 import groovyx.gpars.dataflow.Dataflows
+
+//      _
+//     | |
+//   __| |_ __ _   _
+//  / _` | '__| | | |
+// | (_| | |  | |_| |
+//  \__,_|_|   \__, |
+//              __/ |
+//             |___/
+//
 
 final File NBA_SCORES_FILE = new File("data/nbascore.csv")
 
@@ -39,7 +53,15 @@ def when = { Closure... filters ->
     return { game -> filters*.doCall(game).every { it } }
 }
 
-// PROBLEM
+//                  _     _
+//                 | |   | |
+//  _ __  _ __ ___ | |__ | | ___ _ __ ___
+// | '_ \| '__/ _ \| '_ \| |/ _ \ '_ ` _ \
+// | |_) | | | (_) | |_) | |  __/ | | | | |
+// | .__/|_|  \___/|_.__/|_|\___|_| |_| |_|
+// | |
+// |_|
+//
 
 final def sinceNewYear = { game ->
     return (toDate << field(0) << game) >= toDate('01012014')
@@ -49,7 +71,7 @@ final def whenVisitor = when(validRecord, lakerAsVisitor)
 final def whenVisitorSinceNewYear = when(whenVisitor, sinceNewYear)
 final def winsOverTotal = { map -> map.win / map.total }
 
-//
+/* How to collect results */
 final def gamesPlayedAndWon = { records, game ->
     def didItWin = winOrLose << fields(2,4) << game
     if (didItWin) {
@@ -58,7 +80,8 @@ final def gamesPlayedAndWon = { records, game ->
     records.total += 1
     records
 }
-//
+
+/* We dont want to have a shared map out there */
 final def emptyMap = { [total:0, win:0] }
 
 // GENERALIZATION
@@ -74,6 +97,15 @@ final probabilityToWin = { filter ->
 
     return winsOverTotal << sample
 }
+
+//            _       _   _
+//           | |     | | (_)
+//  ___  ___ | |_   _| |_ _  ___  _ __
+// / __|/ _ \| | | | | __| |/ _ \| '_ \
+// \__ \ (_) | | |_| | |_| | (_) | | | |
+// |___/\___/|_|\__,_|\__|_|\___/|_| |_|
+//
+//
 
 def sampleBenchmark = benchmark(warmUpTime: 10){
     'SEQUENTIAL' {
