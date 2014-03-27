@@ -12,11 +12,11 @@ import groovyx.gpars.actor.Actors
 import java.util.concurrent.CountDownLatch
 
 final countDown = new CountDownLatch(10)
+final printAndWait = { message -> println message ; Thread.sleep(2000) }
 final pong = Actors.actor {
     loop {
         react { message ->
             countDown.countDown()
-            println "Countdown: ${countDown.count}"
             println message
             reply "pong"
         }
@@ -27,9 +27,8 @@ final ping = Actors.actor {
     pong << "ping"
     loop {
         react { message ->
-           println message
-           Thread.sleep(2000)
-           pong << "ping"
+            printAndWait(message)
+            pong << "ping"
         }
     }
 }
