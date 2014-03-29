@@ -9,29 +9,40 @@
 //
 
 import groovyx.gpars.actor.Actors
+import groovyx.gpars.actor.DefaultActor
 import java.util.concurrent.CountDownLatch
 
 final countDown = new CountDownLatch(10)
-final printAndWait = { message -> println message ; Thread.sleep(2000) }
-final pong = Actors.actor {
-    loop {
-        react { message ->
-            countDown.countDown()
-            println message
-            reply "pong"
+
+class PingPongPlayer extends DefaultActor {
+
+    String funnyWord
+    Boolean first
+    PingPongPlayer contender
+    CountDownLatch countDown
+
+    void act() {
+        if (first) {
+            contender << funnyWord
+        }
+        loop {
+            react {
+                println it
+                contender << funnyWord
+                Thread.sleep(2000)
+                countDown.countDown()
+            }
         }
     }
+
 }
 
-final ping = Actors.actor {
-    pong << "ping"
-    loop {
-        react { message ->
-            printAndWait(message)
-            pong << "ping"
-        }
-    }
-}
+def ping = new PingPongPlayer(funnyWord:'Hey', first:true, countDown: countDown)
+def pong = new PingPongPlayer(funnyWord:'Ho', contender: ping, countDown: countDown)
+
+ping.contender = pong
+
+[ping,pong]*.start()
 
 // EXAMPLE FOR READING A LINE AND RETURNING THE REVERSE
 // EXAMPLE FOR AN ACTOR CROPPING IMAGES SENT TO IT

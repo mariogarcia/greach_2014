@@ -25,11 +25,16 @@
 // 02: PARALLEL               | 15
 // 03: ASYNC EXECUTION        | 10
 // 04: SPECULATIONS           | 10
-// 05: DATAFLOW               | 25
-// 06: ACTORS                 | 30
+// 05: AGENTS                 | 10
+// 06: DATAFLOW               | 25
+// 07: ACTORS                 | 30
 // ---------------------------|---
 //                            |100 min
 //
+// KEEP IN MIND
+// ------------
+// * How to deal with exceptions
+// * Actor's message handler
 //
 //
 //
