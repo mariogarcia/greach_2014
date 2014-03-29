@@ -34,9 +34,13 @@ class FunctionalSimplicity {
         }
     }
 
-    Integer extractMaximumDifference() {
-        def differenceBetweenScores = extractIntegerFields(2,4) >> substract
+    // DOESNT WORK AS PROPERTY...DONT KNOW WHY...YET
+    // Closure<Integer> differenceBetweenScores = extractIntegerFields(2,4) >> substract
+    Closure<Integer> getDifferenceBetweenScores() {
+        return extractIntegerFields(2,4) >> substract
+    }
 
+    Integer extractMaximumDifference() {
         return extractMaximum(differenceBetweenScores)
     }
 

@@ -91,6 +91,7 @@ def imperativeVSFunctional = benchmark {
         /* --------------------------------------------------- */
 
         // NO OUTER VARIABLES
+        // EASIER TO GO PARALLEL
         Integer max = NBA_SCORES_FILE.withReader { reader ->
             return reader.inject(0) { max, line ->
                 try {
@@ -105,15 +106,13 @@ def imperativeVSFunctional = benchmark {
     }
 
     'Functional Groovy 2' {
-
-        // THIS DESCRIBES THE PROBLEM
-        // GET ALL VISITOR SCORES AND GET THE MAXIMUM VALUE
         Integer max = NBA_SCORES_FILE.withReader { reader->
-            reader.
-                collect { line -> try { line.split(COMMA)[2] as Integer } catch (e) { 0 } }.
-                max()
-        }
+            def visitorScore = { line -> try { line.split(COMMA)[2] as Integer } catch (e) { 0 } }
 
+            // THIS DESCRIBES THE PROBLEM
+            // GET ALL VISITOR SCORES AND GET THE MAXIMUM VALUE
+            reader.collect(visitorScore).max()
+        }
         assert max == 186
     }
 

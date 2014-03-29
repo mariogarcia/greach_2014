@@ -131,13 +131,19 @@ class FunctionalSimplicity {
     // GENERALIZATION
     Integer extractMaximum(Closure<Integer> criteria) {
         return NBA_SCORES_FILE.withReader { reader->
-            reader.
-                collect { line -> try { criteria(line) as Integer } catch (e) { 0 } }.
-                max()
+            reader.collect(safely(criteria)).max()
+        }
+    }
+
+    // TEMPLATE PATTERN FOR APPLYING TRANSFORMATIONS SAFELY
+    Closure<Integer> safely = { Closure<Integer> collector ->
+        return { String line ->
+            try { collector(line) } catch(e) { 0 }
         }
     }
 
     Integer extractMaximumDifference() {
+        // ITS NOT ABOUT DOING A ONE LINER....I DONT LIKE PERL ARGGG!!!!!
         return extractMaximum { it.split(COMMA)[4, 2]*.toInteger().sort().with { last() - first() } }
     }
 
@@ -155,8 +161,8 @@ def imperativeVSFunctional = benchmark {
     }
     'Functional Simplicity' {
         new FunctionalSimplicity().with {
-            assert extractMaximum { l -> l.split(COMMA)[2] } == 186 // Maximum visitor score
-            assert extractMaximum { l -> l.split(COMMA)[4] } == 184 // Maximum home score
+            assert extractMaximum { l -> l.split(COMMA)[2].toInteger() } == 186 // Maximum visitor score
+            assert extractMaximum { l -> l.split(COMMA)[4].toInteger() } == 184 // Maximum home score
         }
     }
 }
