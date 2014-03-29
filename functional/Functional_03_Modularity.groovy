@@ -24,14 +24,13 @@ class FunctionalSimplicity {
     /* --------------------------------------------------- */
 
     // GENERALIZATION
-    Integer extractMaximum(final Closure<Integer> collector) {
+    Integer extractMaximum(final Closure<Integer> collector, final Closure<Boolean> criteria = { it } ) {
         return NBA_SCORES_FILE.withReader { reader->
             Stream.from(reader).
                 map(csvFields).
                 filter(validLines).
-                map(collector).
-                collect().
-            max()
+                filter(criteria).
+                map(collector).collect().max()
         }
     }
 
