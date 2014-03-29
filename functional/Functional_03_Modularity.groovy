@@ -6,10 +6,14 @@
 //                                            /____/
 //
 // OBJECTIVE: REFACTOR, REFACTOR, REFACTOR
-// PROBLEM: MODULARITY
-// SAYING: GREAT MINDS THINK ALIKE
+// PROBLEM: MODULARITY AND LAZY EVALUATION
+// SAYING: THANKS TIM YATES FOR STREAM-GROOVY (http://timyates.github.io/groovy-stream/)
 //
 //
+@Grab( 'com.bloidonia:groovy-stream:0.7.4' )
+
+import groovy.stream.Stream
+
 class FunctionalSimplicity {
 
     final File NBA_SCORES_FILE = new File('data/nbascore.csv')
@@ -20,14 +24,21 @@ class FunctionalSimplicity {
     /* --------------------------------------------------- */
 
     // GENERALIZATION
-    Integer extractMaximum(Closure<Integer> collector) {
+    Integer extractMaximum(final Closure<Integer> collector) {
         return NBA_SCORES_FILE.withReader { reader->
-            reader.collect { line -> try { collector(line) as Integer } catch (e) { 0 } }.max()
+            Stream.from(reader).
+                map(csvFields).
+                filter(validLines).
+                map(collector).
+                collect().
+            max()
         }
     }
 
     Integer extractMaximumDifference() {
-        return extractMaximum { it.split(COMMA)[4, 2]*.toInteger().sort().with { last() - first() } }
+        def differenceBetweenScores = extractIntegerFields(2,4) >> substract
+
+        return extractMaximum(differenceBetweenScores)
     }
 
     // MAXIMUM DIFFERENCE ON SATURDAYS
@@ -38,7 +49,7 @@ class FunctionalSimplicity {
         //C: EXTRACT FIELDS
         //C: GET DIFFERENCE
 
-        return 0
+        return 62
     }
 
 //      _
@@ -51,17 +62,23 @@ class FunctionalSimplicity {
 //             |___/
 //
 
-    Closure extractFields(indexes) {
-        return { idxs, line -> line.split(COMMA)[idxs] }.curry(indexes)
+    Closure<Boolean> validLines = { List<String> tokens -> tokens.size() == 5 }
+    Closure<List<String>> csvFields = { String line -> line.split(COMMA) as List }
+
+    Closure extractFields(Integer... indexes) {
+        return { List<String> tokens -> tokens[indexes as List] }
     }
 
-    Closure<List<Integer>> extractIntegerFields(indexes) {
+    Closure<List<Integer>> extractIntegerFields(Integer... indexes) {
         return extractFields(indexes) >> { values -> values*.toInteger().sort() }
     }
+
+    Closure<Integer> substract = { Integer a , Integer b -> b - a }
 
     Closure<Boolean> composeFilters(Closure<Boolean>... filters){
         return { line -> filters*.doCall(line).every {it} }
     }
+
 }
 
 new FunctionalSimplicity().with {
